@@ -3,30 +3,29 @@ import pytest
 import requests
 from selenium import webdriver
 from faker import Faker
-from urls import URLS
-from endpoints import Api
+from urls import Urls, Api
+
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
 
-fake = Faker("ru_RU")
-
-
-@pytest.fixture(params=['firefox', 'chrome'])
+@pytest.fixture(scope='function', params=['firefox', 'chrome'])
+@allure.title('Запуск драйвера')
 def driver(request):
-    browser = None
+    driver = None
+    if request.param == 'chrome':
+        driver = webdriver.Chrome()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--window-size=1024,768')
     if request.param == 'firefox':
-        options = webdriver.FirefoxOptions()
-        options.add_argument('--window-size=1920,1080')
-        browser = webdriver.Firefox(options=options)
-    elif request.param == 'chrome':
-        options = webdriver.ChromeOptions()
-        options.add_argument('--window-size=1920,1080')
-        browser = webdriver.Chrome(options=options)
-    browser.get(URLS.MAIN_PAGE_URL)
-    yield browser
-    browser.quit()
+        driver = webdriver.Firefox()
+    yield driver
+    driver.quit()
 
-
+@allure.title('Генерация данных пользователя')
+@pytest.fixture(scope='function')
+def generate_user():
+    creds = generate_user_creds()
+    return creds
 
 @allure.title('Регистрация юзера')
 @pytest.fixture(scope='function')
@@ -36,7 +35,8 @@ def registered_user(generate_user):
     yield generate_user
     requests.delete(Api.user_api, headers={"Authorization": access_token})
 
-
+fake = Faker("ru_RU")
+@allure.title('Генерация данных пользователя')
 def generate_user_creds():
     data = {
         'email': fake.email(),
@@ -44,3 +44,12 @@ def generate_user_creds():
         'name': fake.name()
     }
     return data
+
+@allure.title('Авторизация юзера')
+@pytest.fixture(scope='function')
+def authorize_user(driver, registered_user):
+    login_page = LoginPage(driver)
+    main_page = MainPage(driver)
+    driver.get(Urls.LOGIN_PAGE_URL)
+    login_page.fill_user_data_form(registered_user['email'], registered_user['password'])
+    main_page.wait_for_load_main_page()

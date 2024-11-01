@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 
-class OrderPageLocators:
+class FeedPageLocators:
 
     # первый заказ
     FIRST_ORDER = (By.XPATH, '//*[contains(@class, "OrderHistory_link")]')

@@ -3,9 +3,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-from conftest import driver
-
-
 class BasePage:
 
     def __init__(self, driver):
@@ -15,12 +12,16 @@ class BasePage:
     def get_url(self):
         return self.driver.current_url
 
+    # открываем нужную страницу
+    def open_page(self, url):
+        self.driver.get(url)
+
     # Ожидание отображения локатора
     def find_and_wait_element(self, locator):
         return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(locator))
 
     # Клик по кнопке
-    def click_button(self, locator):
+    def click_element(self, locator):
         self.find_and_wait_element(locator).click()
 
     # Заполнение формы
@@ -43,7 +44,7 @@ class BasePage:
     # Проверяем видимость
     def check_visibility_of_element(self, locator):
         try:
-            self.driver.find_element_with_wait(locator)
+            self.driver.find_and_wait_element(locator)
             return True
         finally:
             return False

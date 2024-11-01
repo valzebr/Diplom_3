@@ -18,14 +18,12 @@ class LoginPage(BasePage):
     def fill_user_data_form(self, email, password):
         self.fill_email_field(email)
         self.fill_password_field(password)
-        self.click_button(LoginLocators.LOGIN_BUTTON)
+        self.click_element(LoginLocators.LOGIN_BUTTON)
 
     @allure.step('Кликаем по кнопке "Восстановить пароль"')
     def click_restore_password(self):
-        self.find_and_wait_element(LoginLocators.RESTORE_PASSWORD_LINK)
-        self.click_button(LoginLocators.RESTORE_PASSWORD_LINK)
+        self.click_element(LoginLocators.RESTORE_PASSWORD_LINK)
 
     @allure.step('Кликаем по кнопке "Констурктор"')
     def click_constructor_button(self):
-        self.find_and_wait_element(HeaderLocators.CONSTRUCTOR_BUTTON)
-        self.click_button(HeaderLocators.CONSTRUCTOR_BUTTON)
+        self.click_element(HeaderLocators.CONSTRUCTOR_BUTTON)
