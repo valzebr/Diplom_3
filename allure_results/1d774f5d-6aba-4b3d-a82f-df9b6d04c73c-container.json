@@ -1,0 +1,1 @@
+{"uuid": "0aee1cdf-b35d-452b-84b9-799af94fa691", "children": ["ef1a1406-49ee-4c8f-adbc-fced51cbcd02"], "befores": [{"name": "Регистрация юзера", "status": "passed", "start": 1730633763031, "stop": 1730633763365}], "afters": [{"name": "Регистрация юзера::0", "status": "passed", "start": 1730633767339, "stop": 1730633767888}], "start": 1730633763031, "stop": 1730633767888}
