@@ -46,7 +46,7 @@ class BasePage:
         try:
             self.driver.find_and_wait_element(locator)
             return True
-        finally:
+        except Exception:
             return False
 
     # ожидаем, пока элемент не исчез

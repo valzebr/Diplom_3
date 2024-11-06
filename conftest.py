@@ -13,7 +13,7 @@ from pages.forgot_page import ForgotPage
 from pages.reset_page import ResetPage
 
 @pytest.fixture(scope='function', params=['firefox', 'chrome'])
-@allure.title('Запуск драйвера')
+@allure.step('Запуск драйвера')
 def driver(request):
     driver = None
     if request.param == 'chrome':
@@ -25,13 +25,13 @@ def driver(request):
     yield driver
     driver.quit()
 
-@allure.title('Генерация данных пользователя')
+@allure.step('Генерация данных пользователя')
 @pytest.fixture(scope='function')
 def generate_user():
     creds = generate_user_creds()
     return creds
 
-@allure.title('Регистрация юзера')
+@allure.step('Регистрация юзера')
 @pytest.fixture(scope='function')
 def registered_user(generate_user):
     response = requests.post(Api.register_api, data=generate_user)
@@ -40,7 +40,7 @@ def registered_user(generate_user):
     requests.delete(Api.user_api, headers={"Authorization": access_token})
 
 fake = Faker("ru_RU")
-@allure.title('Генерация данных пользователя')
+@allure.step('Генерация данных пользователя')
 def generate_user_creds():
     data = {
         'email': fake.email(),
@@ -49,7 +49,7 @@ def generate_user_creds():
     }
     return data
 
-@allure.title('Авторизация юзера')
+@allure.step('Авторизация юзера')
 @pytest.fixture(scope='function')
 def authorize_user(driver, registered_user):
     login_page = LoginPage(driver)
